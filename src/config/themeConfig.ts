@@ -21,5 +21,9 @@ export const themeConfig = extendTheme({
           props.colorMode === 'dark' ? 'component-dark' : 'component-light'
       }
     })
+  },
+  fonts: {
+    heading: `'Roboto Mono', monospace`,
+    body: `'Roboto Mono', monospace`
   }
 })
