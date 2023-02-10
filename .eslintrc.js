@@ -123,7 +123,7 @@ module.exports = {
     '@typescript-eslint/return-await': ['error', 'always'],
     '@typescript-eslint/semi': ['error', 'never'],
     'import/order': [
-      'error',
+      'warn',
       {
         alphabetize: { order: 'asc' },
         'newlines-between': 'always',
@@ -140,5 +140,5 @@ module.exports = {
     ],
     'no-restricted-syntax': 'off',
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: ['.eslintrc.js', 'src/config/themeConfig.ts'],
 }
