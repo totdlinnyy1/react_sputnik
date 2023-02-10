@@ -1,10 +1,10 @@
 import {useColorMode} from '@chakra-ui/react'
-import React, {FunctionComponent, useEffect} from 'react'
+import React, {FC, useEffect} from 'react'
 
 import Header from './components/header/Header'
 import getColorMode from './helpers/getColorMode'
 
-const App: FunctionComponent = () => {
+const App: FC = () => {
   const {setColorMode} = useColorMode()
 
   useEffect(() => {

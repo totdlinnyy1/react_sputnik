@@ -1,8 +1,8 @@
 import {Box, Heading, HStack, Image, Link} from '@chakra-ui/react'
-import {FunctionComponent} from 'react'
+import {FC} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 
-const Header: FunctionComponent = () => {
+const Header: FC = () => {
   return (
     <Box w='full' p={2} className='defaultColor'>
       <HStack maxW='container.lg' justifyContent='space-between' mx='auto'>
