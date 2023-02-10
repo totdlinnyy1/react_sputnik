@@ -7,7 +7,7 @@ export const themeConfig = extendTheme({
   colors: {
     'bg-dark': '#031D44',
     'bg-light': '#F1DEDE',
-    'component-light': '#ECD444',
+    'component-light': '#9EADC8',
     'component-dark': '#947BD3',
     'component-primary': '#DB2763'
   },
