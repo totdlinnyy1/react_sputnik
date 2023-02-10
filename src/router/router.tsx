@@ -4,6 +4,7 @@ import {createBrowserRouter} from 'react-router-dom'
 import App from '../App'
 import NotFound from '../pages/404/notFound'
 import ErrorPage from '../pages/errorPage/errorPage'
+import WeatherPage from '../pages/weatherPage/weatherPage'
 import GifService from '../services/gifService/gifService'
 
 import {GifLoaderResponse} from './interfaces'
@@ -11,7 +12,11 @@ import {GifLoaderResponse} from './interfaces'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />
+    element: (
+      <App>
+        <WeatherPage />
+      </App>
+    )
   },
   {
     path: '*',
