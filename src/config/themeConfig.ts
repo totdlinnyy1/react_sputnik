@@ -5,11 +5,11 @@ export const themeConfig = extendTheme({
     useSystemColorMode: false
   },
   colors: {
-    'bg-dark': '#031D44',
-    'bg-light': '#F1DEDE',
-    'component-light': '#9EADC8',
-    'component-dark': '#947BD3',
-    'component-primary': '#DB2763'
+    'bg-dark': '#827081',
+    'bg-light': '#E3D0D8',
+    'component-light': '#E7E6F7',
+    'component-dark': '#AEA3B0',
+    'component-primary': '#C03221'
   },
   styles: {
     global: (props: ThemeComponentProps) => ({

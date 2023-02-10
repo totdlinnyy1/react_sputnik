@@ -21,6 +21,7 @@ module.exports = {
   settings: { 'import/resolver': { typescript: {} } },
   rules: {
     '@typescript-eslint/no-useless-constructor': 'off',
+    '@typescript-eslint/no-throw-literal': 'off',
     'no-unsafe-finally': 'off',
     'import/no-extraneous-dependencies': 'off',
     'import/no-cycle': 'off',
