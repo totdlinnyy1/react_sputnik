@@ -11,7 +11,9 @@ const NotFound: FC = () => {
     <Container maxW='container.lg' h='100vh'>
       <VStack h='100vh' justifyContent='center'>
         <Image src={data.gif} alt='random gif' />
-        <Heading as='h2'>Страница не найдена :(</Heading>
+        <Heading as='h2' textAlign='center'>
+          Страница не найдена :(
+        </Heading>
         <Text maxW='container.sm' align='center'>
           Но чтобы Вы не грустили держите гифку, потом можете вернуться на
           главную страницу
