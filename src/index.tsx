@@ -7,6 +7,10 @@ import {themeConfig} from './config/themeConfig'
 import reportWebVitals from './reportWebVitals'
 import router from './router/router'
 
+import '@fontsource/roboto-mono/400.css'
+import '@fontsource/roboto-mono/300.css'
+import '@fontsource/roboto-mono/700.css'
+
 const root = createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <>
