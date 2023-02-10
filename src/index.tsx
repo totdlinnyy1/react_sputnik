@@ -1,15 +1,20 @@
+import { ChakraProvider } from '@chakra-ui/react'
 import React from 'react'
 import {createRoot} from 'react-dom/client'
+import {RouterProvider} from 'react-router-dom'
 
-import App from './App'
 import reportWebVitals from './reportWebVitals'
+import router from './router/router'
+import {themeConfig} from './config/themeConfig'
 
 const root = createRoot(
   document.getElementById('root') as HTMLElement
 )
 root.render(
   <React.StrictMode>
-    <App/>
+    <ChakraProvider theme={themeConfig}>
+      <RouterProvider router={router} />
+    </ChakraProvider>
   </React.StrictMode>
 )
 
