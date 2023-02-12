@@ -10,12 +10,13 @@ import {
 import {FC} from 'react'
 
 import CurrentWeatherPanel from './panels/currentWeatherPanel'
+import HoursWeatherPanel from './panels/hoursWeatherPanel'
 
 const WeatherPage: FC = () => {
   return (
     <Box w='full' mt='8'>
       <Heading as='h1'>Погода</Heading>
-      <Tabs isFitted color='component-primary'>
+      <Tabs isFitted>
         <TabList>
           <Tab>Сейчас</Tab>
           <Tab>По часам</Tab>
@@ -27,7 +28,7 @@ const WeatherPage: FC = () => {
             <CurrentWeatherPanel />
           </TabPanel>
           <TabPanel>
-            <p>two!</p>
+            <HoursWeatherPanel />
           </TabPanel>
           <TabPanel>
             <p>three!</p>
