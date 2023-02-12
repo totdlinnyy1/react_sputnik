@@ -10,6 +10,7 @@ import {
 import {FC} from 'react'
 
 import CurrentWeatherPanel from './panels/currentWeatherPanel'
+import DaysWeatherPanel from './panels/daysWeatherPanle'
 import HoursWeatherPanel from './panels/hoursWeatherPanel'
 
 const WeatherPage: FC = () => {
@@ -31,7 +32,7 @@ const WeatherPage: FC = () => {
             <HoursWeatherPanel />
           </TabPanel>
           <TabPanel>
-            <p>three!</p>
+            <DaysWeatherPanel />
           </TabPanel>
         </TabPanels>
       </Tabs>
