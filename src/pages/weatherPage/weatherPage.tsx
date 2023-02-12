@@ -9,11 +9,13 @@ import {
 } from '@chakra-ui/react'
 import {FC} from 'react'
 
+import CurrentWeatherPanel from './panels/currentWeatherPanel'
+
 const WeatherPage: FC = () => {
   return (
     <Box w='full' mt='8'>
       <Heading as='h1'>Погода</Heading>
-      <Tabs isFitted>
+      <Tabs isFitted color='component-primary'>
         <TabList>
           <Tab>Сейчас</Tab>
           <Tab>По часам</Tab>
@@ -22,7 +24,7 @@ const WeatherPage: FC = () => {
 
         <TabPanels>
           <TabPanel>
-            <p>one!</p>
+            <CurrentWeatherPanel />
           </TabPanel>
           <TabPanel>
             <p>two!</p>
