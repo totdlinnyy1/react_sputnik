@@ -1,6 +1,8 @@
 import axios from 'axios'
 
+// GifService is service with method that can fetch random gif from giphy api
 export default class GifService {
+  // fetchGifUrl return url of random gif with webp format
   static async fetchGifUrl(): Promise<string> {
     const apiKey = process.env.REACT_APP_GIPHY_API_KEY || ''
     const response = await axios(
