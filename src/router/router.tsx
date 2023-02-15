@@ -2,6 +2,7 @@ import {AxiosError, isAxiosError} from 'axios'
 import {createBrowserRouter} from 'react-router-dom'
 
 import App from '../App'
+import {WeatherContextProvider} from '../context/weatherContext/weatherContext'
 import NotFound from '../pages/404/notFound'
 import ErrorPage from '../pages/errorPage/errorPage'
 import WeatherPage from '../pages/weatherPage/weatherPage'
@@ -13,9 +14,11 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <App>
-        <WeatherPage />
-      </App>
+      <WeatherContextProvider>
+        <App>
+          <WeatherPage />
+        </App>
+      </WeatherContextProvider>
     )
   },
   {

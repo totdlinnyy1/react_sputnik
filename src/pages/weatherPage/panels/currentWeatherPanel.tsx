@@ -1,7 +1,16 @@
 import {Box, Heading, Image, Text} from '@chakra-ui/react'
 import {FC} from 'react'
 
+import {useWeather} from '../../../context/weatherContext/weatherContext'
+import capitalizeFirstLetter from '../../../helpers/capitalizeFirstLetter'
+import getReadableTime from '../../../helpers/getReadableTime'
+import getRoundedTemp from '../../../helpers/getRoundedTemp'
+
 const CurrentWeatherPanel: FC = () => {
+  const {currentWeather} = useWeather()
+  if (!currentWeather) {
+    return <Box></Box>
+  }
   return (
     <Box w='full'>
       <Box pos='relative'>
@@ -14,10 +23,18 @@ const CurrentWeatherPanel: FC = () => {
           color='white'
           p={1}
         >
-          <Heading as='h3'>-24°C Облачно</Heading>
-          <Text>Ветер 20 м/с</Text>
-          <Text>Рассвет - 6:00 Закат - 19:00</Text>
-          <Text>Томск</Text>
+          <Heading as='h3'>
+            {getRoundedTemp(currentWeather.main.temp)}°C{' '}
+            {capitalizeFirstLetter(currentWeather.weather[0].description)}
+          </Heading>
+          <Text>Ветер {currentWeather.wind.speed} м/с</Text>
+          <Text>Влажность {currentWeather.main.humidity}%</Text>
+          <Text>Давление {currentWeather.main.pressure} мбар</Text>
+          <Text>
+            Рассвет - {getReadableTime(currentWeather.sys.sunrise)} Закат -{' '}
+            {getReadableTime(currentWeather.sys.sunset)}
+          </Text>
+          <Text>{currentWeather.name}</Text>
         </Box>
       </Box>
     </Box>
