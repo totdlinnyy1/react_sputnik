@@ -1,6 +1,8 @@
 import {
+  Center,
   Heading,
-  Icon,
+  Image,
+  Spinner,
   Tab,
   TabList,
   TabPanel,
@@ -10,71 +12,56 @@ import {
   VStack
 } from '@chakra-ui/react'
 import {FC} from 'react'
-import {WiDaySunny} from 'react-icons/wi'
 
 import Weather from '../../../components/weather/Weather'
+import {useWeather} from '../../../context/weatherContext/weatherContext'
+import getRoundedTemp from '../../../helpers/getRoundedTemp'
+import getWeatherIcon from '../../../helpers/getWeatherIcon'
+import getWeatherImage from '../../../helpers/getWeatherImage'
 
 const DaysWeatherPanel: FC = () => {
+  const {daysWeather} = useWeather()
+
+  if (!daysWeather) {
+    return (
+      <Center w='full' h='530px'>
+        <Spinner />
+      </Center>
+    )
+  }
+
   return (
     <Tabs isFitted>
       <TabPanels>
-        <TabPanel>
-          <Weather
-            description='hfdios'
-            image='cloud.webp'
-            temp={-24}
-            wind={20}
-            pressure={12}
-            humidity={213}
-          />
-        </TabPanel>
+        {daysWeather.map((weather, key) => (
+          <TabPanel key={key}>
+            <Weather
+              description={weather.weather[0].description}
+              image={getWeatherImage(weather.weather[0].id)}
+              temp={weather.main.temp}
+              wind={weather.wind.speed}
+              pressure={weather.main.pressure}
+              humidity={weather.main.humidity}
+            />
+          </TabPanel>
+        ))}
       </TabPanels>
       <TabList>
-        <Tab>
-          <VStack>
-            <Icon as={WiDaySunny} color='yellow' boxSize='10' />
-            <Heading as='h6' size='md'>
-              -24
-            </Heading>
-            <Text>Сегодня</Text>
-          </VStack>
-        </Tab>
-        <Tab>
-          <VStack alignItems='center'>
-            <Icon as={WiDaySunny} color='yellow' boxSize='10' />
-            <Heading as='h6' size='md'>
-              -24
-            </Heading>
-            <Text>Завтра</Text>
-          </VStack>
-        </Tab>
-        <Tab>
-          <VStack alignItems='center'>
-            <Icon as={WiDaySunny} color='yellow' boxSize='10' />
-            <Heading as='h6' size='md'>
-              -24
-            </Heading>
-            <Text>Вторник</Text>
-          </VStack>
-        </Tab>
-        <Tab>
-          <VStack alignItems='center'>
-            <Icon as={WiDaySunny} color='yellow' boxSize='10' />
-            <Heading as='h6' size='md'>
-              -24
-            </Heading>
-            <Text>Среда</Text>
-          </VStack>
-        </Tab>
-        <Tab>
-          <VStack alignItems='center'>
-            <Icon as={WiDaySunny} color='yellow' boxSize='10' />
-            <Heading as='h6' size='md'>
-              -24
-            </Heading>
-            <Text>Четверг</Text>
-          </VStack>
-        </Tab>
+        {daysWeather.map((weather, key) => (
+          <Tab key={key}>
+            <VStack>
+              <Image
+                w='30px'
+                h='30px'
+                src={getWeatherIcon(weather.weather[0].icon)}
+              />
+              <Heading as='h6' size='xs'>
+                {getRoundedTemp(weather.main.temp)}
+              </Heading>
+              <Text fontSize='xs'>{weather.day}</Text>
+            </VStack>
+          </Tab>
+        ))}
       </TabList>
     </Tabs>
   )
