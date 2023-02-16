@@ -1,6 +1,8 @@
 import {
   Box,
+  Center,
   Heading,
+  Spinner,
   Tab,
   TabList,
   TabPanel,
@@ -9,11 +11,33 @@ import {
 } from '@chakra-ui/react'
 import {FC} from 'react'
 
+import {useWeather} from '../../context/weatherContext/weatherContext'
+
 import CurrentWeatherPanel from './panels/currentWeatherPanel'
 import DaysWeatherPanel from './panels/daysWeatherPanle'
 import HoursWeatherPanel from './panels/hoursWeatherPanel'
 
 const WeatherPage: FC = () => {
+  const {isLoading, error} = useWeather()
+
+  if (isLoading) {
+    return (
+      <Center w='full' h='100vh'>
+        <Spinner />
+      </Center>
+    )
+  }
+
+  if (error !== '') {
+    return (
+      <Center w='full' h='50vh'>
+        <Heading as='h1' color='red'>
+          {error}
+        </Heading>
+      </Center>
+    )
+  }
+
   return (
     <Box w='full' mt='8'>
       <Heading as='h1'>Погода</Heading>
