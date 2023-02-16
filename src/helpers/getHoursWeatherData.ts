@@ -7,7 +7,7 @@ import {
 
 import getReadableTime from './getReadableTime'
 
-interface HoursWeatherApiResponse {
+export interface HoursWeatherApiResponse {
   list: {
     dt: number
     main: Main
