@@ -1,20 +1,32 @@
-import {Box, Heading, Image, Text} from '@chakra-ui/react'
+import {Box, Center, Heading, Image, Spinner, Text} from '@chakra-ui/react'
 import {FC} from 'react'
 
 import {useWeather} from '../../../context/weatherContext/weatherContext'
 import capitalizeFirstLetter from '../../../helpers/capitalizeFirstLetter'
 import getReadableTime from '../../../helpers/getReadableTime'
 import getRoundedTemp from '../../../helpers/getRoundedTemp'
+import getWeatherImage from '../../../helpers/getWeatherImage'
 
 const CurrentWeatherPanel: FC = () => {
   const {currentWeather} = useWeather()
   if (!currentWeather) {
-    return <Box></Box>
+    return (
+      <Center w='full' h='530px'>
+        <Spinner />
+      </Center>
+    )
   }
+
   return (
     <Box w='full'>
       <Box pos='relative'>
-        <Image src='cloud.webp' alt='cloud' />
+        <Image
+          w='full'
+          h='530px'
+          objectFit='cover'
+          src={getWeatherImage(currentWeather.weather[0].id)}
+          alt='cloud'
+        />
         <Box
           bgColor='blackAlpha.400'
           pos='absolute'

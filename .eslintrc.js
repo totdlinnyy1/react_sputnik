@@ -65,7 +65,7 @@ module.exports = {
         selector: 'variable',
         format: ['camelCase', 'UPPER_CASE', 'PascalCase', 'snake_case'],
         filter: {
-          regex: '^(.*-.*)$',
+          regex: '^(.*-.*.*_.*)$',
           match: false,
         },
         leadingUnderscore: 'allow',
