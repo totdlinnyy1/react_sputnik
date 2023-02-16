@@ -8,12 +8,15 @@ import {
   useState
 } from 'react'
 
-interface Weather {
+import getHoursWeatherData from '../../helpers/getHoursWeatherData'
+
+export interface Weather {
   id: number
   description: string
+  icon: string
 }
 
-interface Main {
+export interface Main {
   temp: number
   feels_like: number
   temp_min: number
@@ -22,17 +25,17 @@ interface Main {
   humidity: number
 }
 
-interface Wind {
+export interface Wind {
   speed: number
   deg: number
 }
 
-interface Sys {
+export interface Sys {
   sunrise: number
   sunset: number
 }
 
-interface CurrentWeather {
+export interface CurrentWeather {
   name: string
   weather: Weather[]
   main: Main
@@ -40,8 +43,11 @@ interface CurrentWeather {
   sys: Sys
 }
 
-interface HoursWeather {
-  temp: number
+export interface HoursWeather {
+  dt: string
+  main: Main
+  weather: Weather[]
+  wind: Wind
 }
 
 interface DaysWeather {
@@ -64,7 +70,7 @@ interface ProviderProps {
 
 export const WeatherContextProvider: FC<ProviderProps> = ({children}) => {
   const currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?lat=56.4977&lon=84.9744&appid=${API_KEY}&units=metric&lang=ru`
-  //const hoursWeatherApi = `https://api.openweathermap.org/data/2.5/forecast?lat=56.4977&lon=84.9744&appid=${API_KEY}&units=metric&lang=ru`
+  const hoursWeatherApi = `https://api.openweathermap.org/data/2.5/forecast?lat=56.4977&lon=84.9744&appid=${API_KEY}&units=metric&lang=ru`
 
   const [currentWeather, setCurrentWeather] = useState<CurrentWeather>()
   const [hoursWeather, setHoursWeather] = useState<HoursWeather[]>()
@@ -75,8 +81,8 @@ export const WeatherContextProvider: FC<ProviderProps> = ({children}) => {
       try {
         const currentWeatherResponse = await axios(currentWeatherApi)
         setCurrentWeather(currentWeatherResponse.data)
-        //const hoursWeatherResponse = await axios(hoursWeatherApi)
-        setHoursWeather(currentWeatherResponse.data)
+        const hoursWeatherResponse = await axios(hoursWeatherApi)
+        setHoursWeather(getHoursWeatherData(hoursWeatherResponse.data))
         setDaysWeather(currentWeatherResponse.data)
       } catch (e) {}
     }

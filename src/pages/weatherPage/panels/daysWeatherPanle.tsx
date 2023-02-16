@@ -19,19 +19,14 @@ const DaysWeatherPanel: FC = () => {
     <Tabs isFitted>
       <TabPanels>
         <TabPanel>
-          <Weather weather='Облачно' image='cloud.webp' deg={-24} wind={20} />
-        </TabPanel>
-        <TabPanel>
-          <Weather weather='Облачно' image='cloud.webp' deg={-24} wind={20} />
-        </TabPanel>
-        <TabPanel>
-          <Weather weather='Облачно' image='cloud.webp' deg={-24} wind={20} />
-        </TabPanel>
-        <TabPanel>
-          <Weather weather='Облачно' image='cloud.webp' deg={-24} wind={20} />
-        </TabPanel>
-        <TabPanel>
-          <Weather weather='Облачно' image='cloud.webp' deg={-24} wind={20} />
+          <Weather
+            description='hfdios'
+            image='cloud.webp'
+            temp={-24}
+            wind={20}
+            pressure={12}
+            humidity={213}
+          />
         </TabPanel>
       </TabPanels>
       <TabList>
