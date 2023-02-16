@@ -2,7 +2,7 @@ import {Box, Heading, HStack, Image, Link, Text} from '@chakra-ui/react'
 import {FC} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 
-import useTime from '../../helpers/useTime'
+import useTime from '../../hooks/useTime'
 
 const Header: FC = () => {
   const time = useTime()
