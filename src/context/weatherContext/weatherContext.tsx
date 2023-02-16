@@ -8,7 +8,14 @@ import {
   useState
 } from 'react'
 
+import getDaysWeatherData from '../../helpers/getDaysWeatherData'
 import getHoursWeatherData from '../../helpers/getHoursWeatherData'
+
+interface DefaultWeatherData {
+  weather: Weather[]
+  main: Main
+  wind: Wind
+}
 
 export interface Weather {
   id: number
@@ -35,23 +42,17 @@ export interface Sys {
   sunset: number
 }
 
-export interface CurrentWeather {
+export interface CurrentWeather extends DefaultWeatherData {
   name: string
-  weather: Weather[]
-  main: Main
-  wind: Wind
   sys: Sys
 }
 
-export interface HoursWeather {
+export interface HoursWeather extends DefaultWeatherData {
   dt: string
-  main: Main
-  weather: Weather[]
-  wind: Wind
 }
 
-interface DaysWeather {
-  temp: number
+export interface DaysWeather extends DefaultWeatherData {
+  day: string
 }
 
 interface WeatherContextProps {
@@ -83,7 +84,7 @@ export const WeatherContextProvider: FC<ProviderProps> = ({children}) => {
         setCurrentWeather(currentWeatherResponse.data)
         const hoursWeatherResponse = await axios(hoursWeatherApi)
         setHoursWeather(getHoursWeatherData(hoursWeatherResponse.data))
-        setDaysWeather(currentWeatherResponse.data)
+        setDaysWeather(getDaysWeatherData(hoursWeatherResponse.data))
       } catch (e) {}
     }
     fetchData()
