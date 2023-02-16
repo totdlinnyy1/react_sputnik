@@ -19,7 +19,8 @@ const router = createBrowserRouter([
           <WeatherPage />
         </App>
       </WeatherContextProvider>
-    )
+    ),
+    errorElement: <ErrorPage />
   },
   {
     path: '*',
