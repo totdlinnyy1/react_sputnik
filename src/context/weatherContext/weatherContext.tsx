@@ -10,6 +10,7 @@ import {
 
 import getDaysWeatherData from '../../helpers/getDaysWeatherData'
 import getHoursWeatherData from '../../helpers/getHoursWeatherData'
+import useGeolocation from '../../hooks/useGeolocation'
 
 interface DefaultWeatherData {
   weather: Weather[]
@@ -75,14 +76,20 @@ interface ProviderProps {
 }
 
 export const WeatherContextProvider: FC<ProviderProps> = ({children}) => {
-  const currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?lat=56.4977&lon=84.9744&appid=${API_KEY}&units=metric&lang=ru`
-  const hoursWeatherApi = `https://api.openweathermap.org/data/2.5/forecast?lat=56.4977&lon=84.9744&appid=${API_KEY}&units=metric&lang=ru`
+  const geolocation = useGeolocation()
 
+  const defaultLat = 56.4977
+  const defaultLng = 84.9744
+  const [lat, setLat] = useState<number>(defaultLat)
+  const [lng, setLng] = useState<number>(defaultLng)
   const [currentWeather, setCurrentWeather] = useState<CurrentWeather>()
   const [hoursWeather, setHoursWeather] = useState<HoursWeather[]>()
   const [daysWeather, setDaysWeather] = useState<DaysWeather[]>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>('')
+
+  const currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric&lang=ru`
+  const hoursWeatherApi = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric&lang=ru`
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -102,8 +109,14 @@ export const WeatherContextProvider: FC<ProviderProps> = ({children}) => {
         setIsLoading(false)
       }
     }
-    fetchData()
-  }, [])
+    if (geolocation.loaded) {
+      if (geolocation.error === '') {
+        setLat(geolocation.coordinates.lat)
+        setLng(geolocation.coordinates.lng)
+      }
+      fetchData()
+    }
+  }, [geolocation.loaded])
 
   return (
     <WeatherContext.Provider
