@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, {isAxiosError} from 'axios'
 import {
   createContext,
   FC,
@@ -59,11 +59,16 @@ interface WeatherContextProps {
   currentWeather?: CurrentWeather
   hoursWeather?: HoursWeather[]
   daysWeather?: DaysWeather[]
+  isLoading: boolean
+  error: string
 }
 
 const API_KEY = process.env.REACT_APP_WEATHER_API_KEY || ''
 
-const WeatherContext = createContext<WeatherContextProps>({})
+const WeatherContext = createContext<WeatherContextProps>({
+  isLoading: true,
+  error: ''
+})
 
 interface ProviderProps {
   children: ReactNode
@@ -76,6 +81,8 @@ export const WeatherContextProvider: FC<ProviderProps> = ({children}) => {
   const [currentWeather, setCurrentWeather] = useState<CurrentWeather>()
   const [hoursWeather, setHoursWeather] = useState<HoursWeather[]>()
   const [daysWeather, setDaysWeather] = useState<DaysWeather[]>()
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string>('')
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -85,14 +92,22 @@ export const WeatherContextProvider: FC<ProviderProps> = ({children}) => {
         const hoursWeatherResponse = await axios(hoursWeatherApi)
         setHoursWeather(getHoursWeatherData(hoursWeatherResponse.data))
         setDaysWeather(getDaysWeatherData(hoursWeatherResponse.data))
-      } catch (e) {}
+        setIsLoading(false)
+      } catch (e) {
+        if (isAxiosError(e)) {
+          setError(
+            'Что-то определенно пошло не так! Надеюсь это у api что-то накрылось, а не у меня.'
+          )
+        }
+        setIsLoading(false)
+      }
     }
     fetchData()
   }, [])
 
   return (
     <WeatherContext.Provider
-      value={{currentWeather, hoursWeather, daysWeather}}
+      value={{currentWeather, hoursWeather, daysWeather, isLoading, error}}
     >
       {children}
     </WeatherContext.Provider>
