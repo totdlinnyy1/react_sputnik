@@ -29,13 +29,7 @@ const WeatherPage: FC = () => {
   }
 
   if (error !== '') {
-    return (
-      <Center w='full' h='50vh'>
-        <Heading as='h1' color='red'>
-          {error}
-        </Heading>
-      </Center>
-    )
+    throw new Error(error)
   }
 
   return (
