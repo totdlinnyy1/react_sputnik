@@ -16,6 +16,9 @@ export interface HoursWeatherApiResponse {
   }[]
 }
 
+// getHoursWeatherData get weather data from api response and converts it for components
+// 40 weather values come to the input
+// Returns 5 weather values with intervals of 3 hours
 const getHoursWeatherData = (data: HoursWeatherApiResponse): HoursWeather[] => {
   const MAX_ELEMENTS = 5
   const weather: HoursWeather[] = []

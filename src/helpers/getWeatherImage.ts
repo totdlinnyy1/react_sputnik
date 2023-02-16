@@ -10,6 +10,9 @@ enum WeatherImage {
   NOT_FOUND = 'not_found.webp'
 }
 
+// getWeatherImage return weather image name
+// receives a weather code at the input
+// if the code does not match any of the specified ones, then a picture with the inscription "not found" is returned
 const getWeatherImage = (code: number): string => {
   const thunderstorm_code_min = 200
   const thunderstorm_code_max = 232
