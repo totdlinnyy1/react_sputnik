@@ -2,9 +2,11 @@ import {AxiosError, isAxiosError} from 'axios'
 import {createBrowserRouter} from 'react-router-dom'
 
 import App from '../App'
+import {GalleryContextProvider} from '../context/galleryContext/galleryContext'
 import {WeatherContextProvider} from '../context/weatherContext/weatherContext'
 import NotFound from '../pages/404/notFound'
 import ErrorPage from '../pages/errorPage/errorPage'
+import GalleryPage from '../pages/galleryPage/galleryPage'
 import WeatherPage from '../pages/weatherPage/weatherPage'
 import GifService from '../services/gifService/gifService'
 
@@ -19,6 +21,17 @@ const router = createBrowserRouter([
           <WeatherPage />
         </App>
       </WeatherContextProvider>
+    ),
+    errorElement: <ErrorPage />
+  },
+  {
+    path: '/gallery',
+    element: (
+      <GalleryContextProvider>
+        <App>
+          <GalleryPage />
+        </App>
+      </GalleryContextProvider>
     ),
     errorElement: <ErrorPage />
   },
