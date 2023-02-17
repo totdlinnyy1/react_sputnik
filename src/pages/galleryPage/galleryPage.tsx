@@ -20,11 +20,19 @@ import Photo from '../../components/photo/Photo'
 import {useGallery} from '../../context/galleryContext/galleryContext'
 
 const GalleryPage: FC = () => {
-  const {randomPhoto, photos, isLoading, error, clearPhotos, searchPhotos} =
-    useGallery()
+  const {
+    randomPhoto,
+    photos,
+    isLoading,
+    error,
+    clearPhotos,
+    searchPhotos,
+    totalPages
+  } = useGallery()
 
   const [query, setQuery] = useState<string>('')
   const [searchError, setSearchError] = useState<string>('')
+  const [page, setPage] = useState<number>(1)
 
   if (isLoading || !randomPhoto) {
     return (
@@ -38,13 +46,35 @@ const GalleryPage: FC = () => {
     throw new Error(error)
   }
 
-  const handleClick = (): void => {
+  const search = (p = 1): void => {
     if (query === '') {
       setSearchError('Неккоректный запрос')
       return
     }
     if (searchPhotos) {
-      searchPhotos(query)
+      searchPhotos({query, page: p})
+    }
+  }
+
+  const handleSearch = (): void => {
+    setPage(1)
+    search()
+  }
+
+  const handleNext = (): void => {
+    search(page + 1)
+    setPage(page + 1)
+  }
+
+  const handlePrev = (): void => {
+    search(page - 1)
+    setPage(page - 1)
+  }
+
+  const handleClear = (): void => {
+    setPage(1)
+    if (clearPhotos) {
+      clearPhotos()
     }
   }
 
@@ -64,7 +94,7 @@ const GalleryPage: FC = () => {
             icon={<Icon as={AiOutlineSearch} />}
             aria-label='search'
             size='md'
-            onClick={handleClick}
+            onClick={handleSearch}
           />
         </HStack>
         <Text fontSize='sm' color='red'>
@@ -72,7 +102,7 @@ const GalleryPage: FC = () => {
         </Text>
       </FormControl>
       <Center my={4}>
-        {!!photos?.length && <Button onClick={clearPhotos}>Назад</Button>}
+        {!!photos?.length && <Button onClick={handleClear}>Очистить</Button>}
       </Center>
       {!photos?.length ? (
         <Center>
@@ -89,6 +119,14 @@ const GalleryPage: FC = () => {
           ))}
         </Wrap>
       )}
+      <HStack my={8} justify='center' spacing={4}>
+        {page < totalPages && page > 1 && (
+          <Button onClick={handlePrev}>Предыдущая страница</Button>
+        )}
+        {page < totalPages && (
+          <Button onClick={handleNext}>Cледующая страница</Button>
+        )}
+      </HStack>
     </Box>
   )
 }
