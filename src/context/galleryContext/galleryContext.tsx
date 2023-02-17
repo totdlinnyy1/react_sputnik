@@ -10,13 +10,19 @@ import {
 
 const ACCESS_KEY = process.env.REACT_APP_UNSPLASH_ACCESS_KEY || ''
 
+interface SearchProps {
+  query: string
+  page: number
+}
+
 interface GalleryContextProps {
   isLoading: boolean
   error: string
   randomPhoto?: Photo
   photos?: Photo[]
-  searchPhotos?: (query: string) => Promise<void>
+  searchPhotos?: (query: SearchProps) => Promise<void>
   clearPhotos?: () => void
+  totalPages: number
 }
 
 interface User {
@@ -30,6 +36,7 @@ interface Urls {
 
 interface SearchResult {
   results: Photo[]
+  total_pages: number
 }
 
 export interface Photo {
@@ -41,7 +48,8 @@ export interface Photo {
 
 const GalleryContext = createContext<GalleryContextProps>({
   isLoading: true,
-  error: ''
+  error: '',
+  totalPages: 0
 })
 
 interface ProviderProps {
@@ -51,18 +59,24 @@ interface ProviderProps {
 export const GalleryContextProvider: FC<ProviderProps> = ({children}) => {
   const [randomPhoto, setRandomPhoto] = useState<Photo>()
   const [photos, setPhotos] = useState<Photo[]>([])
+  const [totalPages, setTotalPages] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>('')
 
   const randomPhotoApi = `https://api.unsplash.com/photos/random?client_id=${ACCESS_KEY}`
-  const searchApi = (query: string): string =>
-    `https://api.unsplash.com/search/photos?client_id=${ACCESS_KEY}&query=${query}`
 
-  const searchPhotos = async (query: string): Promise<void> => {
+  const searchPhotos = async (props: SearchProps): Promise<void> => {
     try {
       setIsLoading(true)
-      const searchPhotoResponse = await axios<SearchResult>(searchApi(query))
+      const searchPhotoResponse = await axios<SearchResult>(
+        `https://api.unsplash.com/search/photos?client_id=${ACCESS_KEY}&query=${props.query}&page=${props.page}`
+      )
+      if (searchPhotoResponse.data.total_pages === 0) {
+        setIsLoading(false)
+        return
+      }
       setPhotos(searchPhotoResponse.data.results)
+      setTotalPages(searchPhotoResponse.data.total_pages)
       setIsLoading(false)
     } catch (e) {
       if (isAxiosError(e)) {
@@ -74,7 +88,10 @@ export const GalleryContextProvider: FC<ProviderProps> = ({children}) => {
     }
   }
 
-  const clearPhotos = (): void => setPhotos([])
+  const clearPhotos = (): void => {
+    setPhotos([])
+    setTotalPages(0)
+  }
 
   useEffect(() => {
     setIsLoading(true)
@@ -97,7 +114,15 @@ export const GalleryContextProvider: FC<ProviderProps> = ({children}) => {
 
   return (
     <GalleryContext.Provider
-      value={{randomPhoto, photos, isLoading, error, searchPhotos, clearPhotos}}
+      value={{
+        randomPhoto,
+        photos,
+        isLoading,
+        error,
+        searchPhotos,
+        clearPhotos,
+        totalPages
+      }}
     >
       {children}
     </GalleryContext.Provider>
