@@ -62,6 +62,7 @@ interface WeatherContextProps {
   daysWeather?: DaysWeather[]
   isLoading: boolean
   error: string
+  getNewWeather?: (city: string) => Promise<void>
 }
 
 const API_KEY = process.env.REACT_APP_WEATHER_API_KEY || ''
@@ -91,23 +92,31 @@ export const WeatherContextProvider: FC<ProviderProps> = ({children}) => {
   const currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric&lang=ru`
   const hoursWeatherApi = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric&lang=ru`
 
+  const fetchWeather = async (): Promise<void> => {
+    try {
+      const currentWeatherResponse = await axios(currentWeatherApi)
+      setCurrentWeather(currentWeatherResponse.data)
+      const hoursWeatherResponse = await axios(hoursWeatherApi)
+      setHoursWeather(getHoursWeatherData(hoursWeatherResponse.data))
+      setDaysWeather(getDaysWeatherData(hoursWeatherResponse.data))
+      setIsLoading(false)
+    } catch (e) {
+      if (isAxiosError(e)) {
+        setError(
+          'Что-то определенно пошло не так! Надеюсь это у api что-то накрылось, а не у меня.'
+        )
+      }
+      setIsLoading(false)
+    }
+  }
+
+  const getNewWeather = async (city: string): Promise<void> => {
+    await geolocation.getCoordinatesByCityName(city)
+  }
+
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
-      try {
-        const currentWeatherResponse = await axios(currentWeatherApi)
-        setCurrentWeather(currentWeatherResponse.data)
-        const hoursWeatherResponse = await axios(hoursWeatherApi)
-        setHoursWeather(getHoursWeatherData(hoursWeatherResponse.data))
-        setDaysWeather(getDaysWeatherData(hoursWeatherResponse.data))
-        setIsLoading(false)
-      } catch (e) {
-        if (isAxiosError(e)) {
-          setError(
-            'Что-то определенно пошло не так! Надеюсь это у api что-то накрылось, а не у меня.'
-          )
-        }
-        setIsLoading(false)
-      }
+      await fetchWeather()
     }
     if (geolocation.loaded) {
       if (geolocation.error === '') {
@@ -116,11 +125,18 @@ export const WeatherContextProvider: FC<ProviderProps> = ({children}) => {
       }
       fetchData()
     }
-  }, [geolocation.loaded])
+  }, [geolocation.loaded, lat, lng])
 
   return (
     <WeatherContext.Provider
-      value={{currentWeather, hoursWeather, daysWeather, isLoading, error}}
+      value={{
+        currentWeather,
+        hoursWeather,
+        daysWeather,
+        isLoading,
+        error,
+        getNewWeather
+      }}
     >
       {children}
     </WeatherContext.Provider>

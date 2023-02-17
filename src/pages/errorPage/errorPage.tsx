@@ -10,7 +10,9 @@ const ErrorPage: FC = () => {
       <Heading as='h2' textAlign='center'>
         Что-то все поломалось...
       </Heading>
-      <Text fontSize='xs' textAlign='center' color='red'>{error.message}</Text>
+      <Text fontSize='xs' textAlign='center' color='red'>
+        {error.message}
+      </Text>
       <Link as={RouterLink} color='blue' to='/'>
         на главную
       </Link>
