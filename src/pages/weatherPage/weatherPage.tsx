@@ -1,7 +1,13 @@
 import {
   Box,
   Center,
+  FormControl,
+  Text,
   Heading,
+  HStack,
+  Icon,
+  IconButton,
+  Input,
   Spinner,
   Tab,
   TabList,
@@ -9,7 +15,8 @@ import {
   TabPanels,
   Tabs
 } from '@chakra-ui/react'
-import {FC} from 'react'
+import {FC, useState} from 'react'
+import {AiOutlineSearch} from 'react-icons/ai'
 
 import {useWeather} from '../../context/weatherContext/weatherContext'
 
@@ -18,9 +25,12 @@ import DaysWeatherPanel from './panels/daysWeatherPanle'
 import HoursWeatherPanel from './panels/hoursWeatherPanel'
 
 const WeatherPage: FC = () => {
-  const {isLoading, error} = useWeather()
+  const {isLoading, error, currentWeather, getNewWeather} = useWeather()
 
-  if (isLoading) {
+  const [city, setCity] = useState<string>('')
+  const [cityError, setCityError] = useState<string>('')
+
+  if (isLoading || !currentWeather) {
     return (
       <Center w='full' h='100vh'>
         <Spinner />
@@ -32,9 +42,44 @@ const WeatherPage: FC = () => {
     throw new Error(error)
   }
 
+  const handleClick = (query: string): void => {
+    setCityError('')
+    if (query === '') {
+      setCityError('Неккоректное название места')
+      return
+    }
+    if (query === currentWeather.name) {
+      setCityError('Введите название другого места')
+      return
+    }
+    if (getNewWeather) {
+      getNewWeather(query)
+    }
+  }
+
   return (
     <Box w='full' mt='8'>
       <Heading as='h1'>Погода</Heading>
+      <FormControl mt={4}>
+        <HStack>
+          <Input
+            type='text'
+            placeholder='Город'
+            onInput={(e): void => setCity(e.currentTarget.value)}
+          />
+          <IconButton
+            icon={<Icon as={AiOutlineSearch} />}
+            aria-label='search'
+            size='md'
+            onClick={(): void => {
+              handleClick(city)
+            }}
+          />
+        </HStack>
+        <Text fontSize='sm' color='red'>
+          {cityError}
+        </Text>
+      </FormControl>
       <Tabs isFitted>
         <TabList>
           <Tab>Сейчас</Tab>
