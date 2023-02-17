@@ -58,7 +58,7 @@ const useGeolocation = (): UseGeolocationReturn => {
   }
 
   const getCoordinatesByCityName = async (city: string): Promise<string> => {
-    const url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${API_KEY}&lang=ru&limit=1`
+    const url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${API_KEY}&lang=ru&limit=1`
     setLocation(state => ({...state, loaded: false}))
     try {
       const response = await axios<GeocodeResponse[]>(url)
