@@ -15,6 +15,8 @@ interface GalleryContextProps {
   error: string
   randomPhoto?: Photo
   photos?: Photo[]
+  searchPhotos?: (query: string) => Promise<void>
+  clearPhotos?: () => void
 }
 
 interface User {
@@ -53,7 +55,26 @@ export const GalleryContextProvider: FC<ProviderProps> = ({children}) => {
   const [error, setError] = useState<string>('')
 
   const randomPhotoApi = `https://api.unsplash.com/photos/random?client_id=${ACCESS_KEY}`
-  const searchApi = `https://api.unsplash.com/search/photos?client_id=${ACCESS_KEY}&query=Moskow`
+  const searchApi = (query: string): string =>
+    `https://api.unsplash.com/search/photos?client_id=${ACCESS_KEY}&query=${query}`
+
+  const searchPhotos = async (query: string): Promise<void> => {
+    try {
+      setIsLoading(true)
+      const searchPhotoResponse = await axios<SearchResult>(searchApi(query))
+      setPhotos(searchPhotoResponse.data.results)
+      setIsLoading(false)
+    } catch (e) {
+      if (isAxiosError(e)) {
+        setError(
+          'Что-то определенно пошло не так! Надеюсь это у api что-то накрылось, а не у меня.'
+        )
+        setIsLoading(false)
+      }
+    }
+  }
+
+  const clearPhotos = (): void => setPhotos([])
 
   useEffect(() => {
     setIsLoading(true)
@@ -61,8 +82,6 @@ export const GalleryContextProvider: FC<ProviderProps> = ({children}) => {
       try {
         const randomPhotoResponse = await axios<Photo>(randomPhotoApi)
         setRandomPhoto(randomPhotoResponse.data)
-        const searchPhotoResponse = await axios<SearchResult>(searchApi)
-        setPhotos(searchPhotoResponse.data.results)
         setIsLoading(false)
       } catch (e) {
         if (isAxiosError(e)) {
@@ -77,7 +96,9 @@ export const GalleryContextProvider: FC<ProviderProps> = ({children}) => {
   }, [])
 
   return (
-    <GalleryContext.Provider value={{randomPhoto, photos, isLoading, error}}>
+    <GalleryContext.Provider
+      value={{randomPhoto, photos, isLoading, error, searchPhotos, clearPhotos}}
+    >
       {children}
     </GalleryContext.Provider>
   )
