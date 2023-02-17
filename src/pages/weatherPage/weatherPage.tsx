@@ -42,18 +42,18 @@ const WeatherPage: FC = () => {
     throw new Error(error)
   }
 
-  const handleClick = (query: string): void => {
+  const handleClick = (): void => {
     setCityError('')
-    if (query === '') {
+    if (city === '') {
       setCityError('Неккоректное название места')
       return
     }
-    if (query === currentWeather.name) {
+    if (city === currentWeather.name) {
       setCityError('Введите название другого места')
       return
     }
     if (getNewWeather) {
-      getNewWeather(query)
+      getNewWeather(city)
     }
   }
 
@@ -71,9 +71,7 @@ const WeatherPage: FC = () => {
             icon={<Icon as={AiOutlineSearch} />}
             aria-label='search'
             size='md'
-            onClick={(): void => {
-              handleClick(city)
-            }}
+            onClick={handleClick}
           />
         </HStack>
         <Text fontSize='sm' color='red'>
