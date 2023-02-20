@@ -1,69 +1,16 @@
 import axios, {isAxiosError} from 'axios'
-import {
-  createContext,
-  FC,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
+import {createContext, FC, useContext, useEffect, useState} from 'react'
 
 import getDaysWeatherData from '../../helpers/getDaysWeatherData'
 import getHoursWeatherData from '../../helpers/getHoursWeatherData'
 import useGeolocation from '../../hooks/useGeolocation'
-
-interface DefaultWeatherData {
-  weather: Weather[]
-  main: Main
-  wind: Wind
-}
-
-export interface Weather {
-  id: number
-  description: string
-  icon: string
-}
-
-export interface Main {
-  temp: number
-  feels_like: number
-  temp_min: number
-  temp_max: number
-  pressure: number
-  humidity: number
-}
-
-export interface Wind {
-  speed: number
-  deg: number
-}
-
-export interface Sys {
-  sunrise: number
-  sunset: number
-}
-
-export interface CurrentWeather extends DefaultWeatherData {
-  name: string
-  sys: Sys
-}
-
-export interface HoursWeather extends DefaultWeatherData {
-  dt: string
-}
-
-export interface DaysWeather extends DefaultWeatherData {
-  day: string
-}
-
-interface WeatherContextProps {
-  currentWeather?: CurrentWeather
-  hoursWeather?: HoursWeather[]
-  daysWeather?: DaysWeather[]
-  isLoading: boolean
-  error: string
-  getNewWeather?: (city: string) => Promise<void>
-}
+import {ChildrenProps} from '../../interfaces/standard'
+import {
+  CurrentWeather,
+  DaysWeather,
+  HoursWeather,
+  WeatherContextProps
+} from '../../interfaces/weather'
 
 const API_KEY = process.env.REACT_APP_WEATHER_API_KEY || ''
 
@@ -72,11 +19,7 @@ const WeatherContext = createContext<WeatherContextProps>({
   error: ''
 })
 
-interface ProviderProps {
-  children: ReactNode
-}
-
-export const WeatherContextProvider: FC<ProviderProps> = ({children}) => {
+export const WeatherContextProvider: FC<ChildrenProps> = ({children}) => {
   const geolocation = useGeolocation()
 
   const defaultLat = 56.4977

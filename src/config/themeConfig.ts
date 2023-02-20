@@ -8,8 +8,7 @@ export const themeConfig = extendTheme({
     'bg-dark': '#827081',
     'bg-light': '#E3D0D8',
     'component-light': '#E7E6F7',
-    'component-dark': '#AEA3B0',
-    'component-primary': '#C03221'
+    'component-dark': '#AEA3B0'
   },
   styles: {
     global: (props: ThemeComponentProps) => ({

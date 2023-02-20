@@ -1,9 +1,4 @@
-import {
-  HoursWeather,
-  Main,
-  Weather,
-  Wind
-} from '../context/weatherContext/weatherContext'
+import {HoursWeather, Main, Weather, Wind} from '../interfaces/weather'
 
 import getReadableTime from './getReadableTime'
 

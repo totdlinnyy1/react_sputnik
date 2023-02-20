@@ -1,4 +1,4 @@
-import {DaysWeather} from '../context/weatherContext/weatherContext'
+import {DaysWeather} from '../interfaces/weather'
 
 import {HoursWeatherApiResponse} from './getHoursWeatherData'
 import getReadableData from './getReadableData'
