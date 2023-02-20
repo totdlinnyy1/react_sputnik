@@ -1,26 +1,11 @@
 import axios, {isAxiosError} from 'axios'
 import {useEffect, useState} from 'react'
 
-interface Coordinates {
-  lat: number
-  lng: number
-}
-
-interface Geolocation {
-  loaded: boolean
-  coordinates: Coordinates
-  error: string
-}
-
-interface UseGeolocationReturn extends Geolocation {
-  getCoordinatesByCityName: (city: string) => Promise<string>
-}
-
-interface GeocodeResponse {
-  name: string
-  lat: number
-  lon: number
-}
+import {
+  GeocodeResponse,
+  UseGeolocationReturn,
+  Geolocation
+} from '../interfaces/geolocation'
 
 const API_KEY = process.env.REACT_APP_WEATHER_API_KEY || ''
 

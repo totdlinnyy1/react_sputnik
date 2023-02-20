@@ -5,6 +5,7 @@ import {useLoaderData, Link as RouterLink} from 'react-router-dom'
 interface Props {
   gif: string
 }
+
 const NotFound: FC = () => {
   const data = useLoaderData() as Props
   return (

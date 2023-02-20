@@ -1,7 +1,7 @@
 import {Box, Image, Text} from '@chakra-ui/react'
 import {FC} from 'react'
 
-import {Photo as PhotoProps} from '../../context/galleryContext/galleryContext'
+import {Photo as PhotoProps} from '../../interfaces/gallery'
 
 interface Props {
   photo: PhotoProps

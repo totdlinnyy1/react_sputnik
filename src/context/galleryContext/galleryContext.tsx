@@ -1,50 +1,15 @@
 import axios, {isAxiosError} from 'axios'
+import {createContext, FC, useContext, useEffect, useState} from 'react'
+
 import {
-  createContext,
-  FC,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
+  GalleryContextProps,
+  Photo,
+  SearchProps,
+  SearchResult
+} from '../../interfaces/gallery'
+import {ChildrenProps} from '../../interfaces/standard'
 
 const ACCESS_KEY = process.env.REACT_APP_UNSPLASH_ACCESS_KEY || ''
-
-interface SearchProps {
-  query: string
-  page: number
-}
-
-interface GalleryContextProps {
-  isLoading: boolean
-  error: string
-  randomPhoto?: Photo
-  photos?: Photo[]
-  searchPhotos?: (query: SearchProps) => Promise<void>
-  clearPhotos?: () => void
-  totalPages: number
-}
-
-interface User {
-  name: string
-}
-
-interface Urls {
-  full: string
-  small: string
-}
-
-interface SearchResult {
-  results: Photo[]
-  total_pages: number
-}
-
-export interface Photo {
-  user: User
-  description?: string
-  alt_description: string
-  urls: Urls
-}
 
 const GalleryContext = createContext<GalleryContextProps>({
   isLoading: true,
@@ -52,11 +17,7 @@ const GalleryContext = createContext<GalleryContextProps>({
   totalPages: 0
 })
 
-interface ProviderProps {
-  children: ReactNode
-}
-
-export const GalleryContextProvider: FC<ProviderProps> = ({children}) => {
+export const GalleryContextProvider: FC<ChildrenProps> = ({children}) => {
   const [randomPhoto, setRandomPhoto] = useState<Photo>()
   const [photos, setPhotos] = useState<Photo[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
