@@ -1,13 +1,11 @@
 import {Container, useColorMode} from '@chakra-ui/react'
-import React, {FC, ReactNode, useEffect} from 'react'
+import React, {FC, useEffect} from 'react'
 
 import Header from './components/header/Header'
 import getColorMode from './helpers/getColorMode'
+import {ChildrenProps} from './interfaces/standard'
 
-interface Props {
-  children: ReactNode
-}
-const App: FC<Props> = ({children}) => {
+const App: FC<ChildrenProps> = ({children}) => {
   const {setColorMode} = useColorMode()
 
   useEffect(() => {
