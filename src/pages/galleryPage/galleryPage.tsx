@@ -20,16 +20,10 @@ import Photo from '../../components/photo/Photo'
 import {useGallery} from '../../context/galleryContext/galleryContext'
 
 const GalleryPage: FC = () => {
-  const {
-    randomPhoto,
-    photos,
-    isLoading,
-    error,
-    clearPhotos,
-    searchPhotos,
-    totalPages
-  } = useGallery()
+  const {randomPhoto, photos, isLoading, error, clearPhotos, searchPhotos} =
+    useGallery()
 
+  const totalPages = 3
   const [query, setQuery] = useState<string>('')
   const [searchError, setSearchError] = useState<string>('')
   const [page, setPage] = useState<number>(1)
@@ -120,7 +114,7 @@ const GalleryPage: FC = () => {
         </Wrap>
       )}
       <HStack my={8} justify='center' spacing={4}>
-        {page < totalPages && page > 1 && (
+        {page <= totalPages && page > 1 && (
           <Button onClick={handlePrev}>Предыдущая страница</Button>
         )}
         {page < totalPages && (
