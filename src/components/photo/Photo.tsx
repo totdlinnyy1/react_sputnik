@@ -14,12 +14,15 @@ const Photo: FC<Props> = ({photo, size}) => {
   const description = photo.description
     ? photo.description
     : photo.alt_description
+
+  const sm = 280
+  const md = 400
   return (
-    <Box bg='white' w={size === 'big' ? 'max-content' : '400px'} color='black'>
+    <Box bg='white' w={size === 'big' ? 'max-content' : [sm, md]} color='black'>
       <Image
         src={url}
         w={size === 'big' ? 'full' : '400px'}
-        h={size === 'big' ? '1000px' : '400px'}
+        h={size === 'big' ? '' : '400px'}
         objectFit='cover'
       />
       <Box padding={1}>
