@@ -1,15 +1,9 @@
-import axios, {isAxiosError} from 'axios'
+import {isAxiosError} from 'axios'
 import {createContext, FC, useContext, useEffect, useState} from 'react'
 
-import {
-  GalleryContextProps,
-  Photo,
-  SearchProps,
-  SearchResult
-} from '../../interfaces/gallery'
+import {GalleryContextProps, Photo, SearchProps} from '../../interfaces/gallery'
 import {ChildrenProps} from '../../interfaces/standard'
-
-const ACCESS_KEY = process.env.REACT_APP_UNSPLASH_ACCESS_KEY || ''
+import GalleryService from '../../services/galleryService/galleryService'
 
 const GalleryContext = createContext<GalleryContextProps>({
   isLoading: true,
@@ -24,20 +18,16 @@ export const GalleryContextProvider: FC<ChildrenProps> = ({children}) => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>('')
 
-  const randomPhotoApi = `https://api.unsplash.com/photos/random?client_id=${ACCESS_KEY}`
-
   const searchPhotos = async (props: SearchProps): Promise<void> => {
     try {
       setIsLoading(true)
-      const searchPhotoResponse = await axios<SearchResult>(
-        `https://api.unsplash.com/search/photos?client_id=${ACCESS_KEY}&query=${props.query}&page=${props.page}`
-      )
-      if (searchPhotoResponse.data.total_pages === 0) {
+      const searchPhotoResponse = await GalleryService.searchPhotos(props)
+      if (searchPhotoResponse.total_pages === 0) {
         setIsLoading(false)
         return
       }
-      setPhotos(searchPhotoResponse.data.results)
-      setTotalPages(searchPhotoResponse.data.total_pages)
+      setPhotos(searchPhotoResponse.results)
+      setTotalPages(searchPhotoResponse.total_pages)
       setIsLoading(false)
     } catch (e) {
       if (isAxiosError(e)) {
@@ -58,8 +48,8 @@ export const GalleryContextProvider: FC<ChildrenProps> = ({children}) => {
     setIsLoading(true)
     const fetchData = async (): Promise<void> => {
       try {
-        const randomPhotoResponse = await axios<Photo>(randomPhotoApi)
-        setRandomPhoto(randomPhotoResponse.data)
+        const randomPhotoResponse = await GalleryService.getRandomPhoto()
+        setRandomPhoto(randomPhotoResponse)
         setIsLoading(false)
       } catch (e) {
         if (isAxiosError(e)) {
