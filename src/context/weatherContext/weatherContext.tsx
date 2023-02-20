@@ -1,4 +1,4 @@
-import axios, {isAxiosError} from 'axios'
+import {isAxiosError} from 'axios'
 import {createContext, FC, useContext, useEffect, useState} from 'react'
 
 import getDaysWeatherData from '../../helpers/getDaysWeatherData'
@@ -11,8 +11,7 @@ import {
   HoursWeather,
   WeatherContextProps
 } from '../../interfaces/weather'
-
-const API_KEY = process.env.REACT_APP_WEATHER_API_KEY || ''
+import WeatherService from '../../services/weatherService/weatherService'
 
 const WeatherContext = createContext<WeatherContextProps>({
   isLoading: true,
@@ -32,16 +31,19 @@ export const WeatherContextProvider: FC<ChildrenProps> = ({children}) => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>('')
 
-  const currentWeatherApi = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric&lang=ru`
-  const hoursWeatherApi = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric&lang=ru`
-
   const fetchWeather = async (): Promise<void> => {
     try {
-      const currentWeatherResponse = await axios(currentWeatherApi)
-      setCurrentWeather(currentWeatherResponse.data)
-      const hoursWeatherResponse = await axios(hoursWeatherApi)
-      setHoursWeather(getHoursWeatherData(hoursWeatherResponse.data))
-      setDaysWeather(getDaysWeatherData(hoursWeatherResponse.data))
+      const currentWeatherResponse = await WeatherService.getCurrentWeather({
+        lat,
+        lng
+      })
+      setCurrentWeather(currentWeatherResponse)
+      const hoursWeatherResponse = await WeatherService.getHoursWeather({
+        lat,
+        lng
+      })
+      setHoursWeather(getHoursWeatherData(hoursWeatherResponse))
+      setDaysWeather(getDaysWeatherData(hoursWeatherResponse))
       setIsLoading(false)
     } catch (e) {
       if (isAxiosError(e)) {
