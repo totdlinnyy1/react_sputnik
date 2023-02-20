@@ -46,7 +46,7 @@ const HoursWeatherPanel: FC = () => {
           </TabPanel>
         ))}
       </TabPanels>
-      <TabList>
+      <TabList overflowX='scroll'>
         {hoursWeather.map((weather, key) => (
           <Tab key={key}>
             <VStack>
